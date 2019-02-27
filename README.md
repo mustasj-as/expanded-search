@@ -1,6 +1,7 @@
 # Expanded Search plugin for Craft CMS 3.x
 
-An expansion of Crafts search
+Ported https://github.com/composedcreative/craft-expandedsearch from Craft 2 to Craft 3.
+Is is an expansion of Crafts search, which gives you a context for search hits.
 
 ![Screenshot](resources/img/plugin-logo.png)
 
@@ -22,22 +23,25 @@ To install the plugin, follow these instructions.
 
 3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Expanded Search.
 
-## Expanded Search Overview
-
--Insert text here-
-
-## Configuring Expanded Search
-
--Insert text here-
 
 ## Using Expanded Search
 
--Insert text here-
+In your search results template
+
+```
+{% set expandedResults = craft.expandedSearch.search(query) %}
+{% for result in expandedResults %}
+    <strong data-field="{{result.matchedField}}">{{result.entry.title}}</strong><br>
+    <p>{{result.matchedValue}}</p>
+    <a href="{{result.entry.url}}">{{result.entry.url}}</a>
+{% else %}
+    <p>Sorry, no results for {{query}}.</p>
+{% endfor %}
+```
 
 ## Expanded Search Roadmap
 
 Some things to do, and ideas for potential features:
 
 * Release it
-
-Brought to you by [Mustasj](mustasj.no)
+* Add handling for more fields
