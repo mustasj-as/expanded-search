@@ -30,6 +30,8 @@ In your search results template
 
 ```
 {% set expandedResults = craft.expandedSearch.search(query) %}
+{# You can also add a second parameter for how long the matchedValue should be. Defaults to 300 #}
+{% set expandedResults = craft.expandedSearch.search(query, 150) %}
 {% for result in expandedResults %}
     <strong data-field="{{result.matchedField}}">{{result.entry.title}}</strong><br>
     <p>{{result.matchedValue}}</p>
