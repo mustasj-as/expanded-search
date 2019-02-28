@@ -59,7 +59,7 @@ class ExpandedSearchService extends Component
 	* @param string $term
 	* @return array the search results
 	*/
-	public function search($term)
+	public function search($term, $length)
 	{
 		$entries = Entry::find()
 		->search('*' . $term . '*')
@@ -70,7 +70,7 @@ class ExpandedSearchService extends Component
 			//dump($entry->title);
 			$result = new ExpandedSearchModel();
 			$result->entry = $entry;
-			list ($result->matchedField, $result->matchedValue, $result->relatedValues) = $this->findMatchesInFieldSet($entry, $term);
+			list ($result->matchedField, $result->matchedValue, $result->relatedValues) = $this->findMatchesInFieldSet($entry, $term, $length);
 			$results[] = $result;
 		}
 		return $results;
@@ -114,6 +114,31 @@ class ExpandedSearchService extends Component
 	}
 
 	/**
+	* Cleans up the value and adds bold tag to search term
+	* Also shortens the value if needed
+	*
+	* @param mixed $value
+	* @return scalar
+	*/
+	protected function contextualizeHit($content, $term, $length)
+	{
+		$content = strip_tags($content);
+		$pattern = '/('. $term . ')/im';
+		$midway = round($length / 2);
+		if (strlen($content) > $length) {
+			// if the hit is after the middle, we need to shorten the text on both sides
+			$strpos = stripos($content, $term);
+			if ($strpos > $midway) {
+				$content = '...' . substr($content, $strpos - $midway);
+			}
+			if (strlen($content) > $length) {
+				$content = substr($content, 0, $length) . '...';
+			}
+		}
+		return preg_replace($pattern, '<b>${1}</b>', $content);
+	}
+
+	/**
 	* Finds matches in an element's field values
 	*
 	* @param Craft\BaseElementModel $element
@@ -123,14 +148,14 @@ class ExpandedSearchService extends Component
 	*                - The matched value
 	*                - Associative array of related values (handle => value)
 	*/
-	protected function findMatchesInFieldSet(Element $element, $term)
+	protected function findMatchesInFieldSet(Element $element, $term, $length)
 	{
 		foreach ($this->getFieldSetValues($element) as $fieldHandle => $fieldContents) {
 			//dump($fieldContents);
 			if (is_scalar($fieldContents))
 			{
 				if (stripos($fieldContents, $term) !== false) {
-					return [$fieldHandle, $fieldContents, []];
+					return [$fieldHandle, $this->contextualizeHit($fieldContents, $term, $length), []];
 				}
 			}
 			elseif (is_object($fieldContents) && $fieldContents instanceof \verbb\supertable\elements\db\SuperTableBlockQuery)
@@ -142,7 +167,7 @@ class ExpandedSearchService extends Component
 				$relatedValues = [];
 				$matchedValue = '';
 				foreach ($fieldContents->all() as $matrixBlock) {
-					$matrixMatches = $this->findMatchesInFieldSet($matrixBlock, $term);
+					$matrixMatches = $this->findMatchesInFieldSet($matrixBlock, $term, $length);
 					if (!is_null($matrixMatches)) {
 						$matchedValue = $matrixMatches[1];
 						foreach ($this->getFieldSetValues($matrixBlock) as $k => $v) {
@@ -157,9 +182,7 @@ class ExpandedSearchService extends Component
 			{
 				//dump(stripos($fieldContents->getParsedContent(), $term));
 				if (stripos($fieldContents->getParsedContent(), $term)) {
-					$pattern = '/('. $term . ')/im';
-					$content = preg_replace($pattern, '<b>${1}</b>', $fieldContents->getParsedContent());
-					return [$fieldHandle, $content, []];
+					return [$fieldHandle, $this->contextualizeHit($fieldContents->getParsedContent(), $term, $length), []];
 				}
 			}
 			else

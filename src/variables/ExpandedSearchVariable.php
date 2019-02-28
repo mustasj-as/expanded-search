@@ -45,8 +45,8 @@ class ExpandedSearchVariable
      * @param null $optional
      * @return string
      */
-    public function search($term)
+    public function search($term, $length = 300)
     {
-        return ExpandedSearch::$plugin->expandedSearchService->search($term);
+        return ExpandedSearch::$plugin->expandedSearchService->search($term, $length);
     }
 }

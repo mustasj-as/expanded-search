@@ -2,7 +2,7 @@
     "name": "mustasj/expanded-search",
     "description": "An expansion of Crafts search",
     "type": "craft-plugin",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "keywords": [
         "craft",
         "cms",
