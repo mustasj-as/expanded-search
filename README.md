@@ -26,12 +26,20 @@ To install the plugin, follow these instructions.
 
 ## Using Expanded Search
 
+The first parameter is the search term. Which will be salted automatically: `*{term}*`
+The second is settings.
+
+| Setting | Type | Default |
+| ------ | ------ | ------ |
+| length | int | 300 |
+| Github | array | null (all sections) |
+
 In your search results template
+
 
 ```
 {% set expandedResults = craft.expandedSearch.search(query) %}
-{# You can also add a second parameter for how long the matchedValue should be. Defaults to 300 #}
-{% set expandedResults = craft.expandedSearch.search(query, 150) %}
+{% set expandedResults = craft.expandedSearch.search(query, { sections: ['news'], length: 150 }) %}
 {% for result in expandedResults %}
     <strong data-field="{{result.matchedField}}">{{result.entry.title}}</strong><br>
     <p>{{result.matchedValue}}</p>

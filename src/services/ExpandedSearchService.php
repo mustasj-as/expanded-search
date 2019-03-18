@@ -59,18 +59,19 @@ class ExpandedSearchService extends Component
 	* @param string $term
 	* @return array the search results
 	*/
-	public function search($term, $length)
+	public function search($term, $settings)
 	{
 		$entries = Entry::find()
-		->search('*' . $term . '*')
-		->orderBy('score')
-		->all();
+			->search('*' . $term . '*')
+			->section($settings->sections)
+			->orderBy('score')
+			->all();
 		$results = [];
 		foreach ($entries as $entry) {
 			//dump($entry->title);
 			$result = new ExpandedSearchModel();
 			$result->entry = $entry;
-			list ($result->matchedField, $result->matchedValue, $result->relatedValues) = $this->findMatchesInFieldSet($entry, $term, $length);
+			list ($result->matchedField, $result->matchedValue, $result->relatedValues) = $this->findMatchesInFieldSet($entry, $term, $settings->length);
 			$results[] = $result;
 		}
 		return $results;
