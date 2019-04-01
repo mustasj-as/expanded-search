@@ -64,10 +64,16 @@ class ExpandedSearchService extends Component
 		$entries = Entry::find()
 			->search('*' . $term . '*')
 			->section($settings->sections)
-			->orderBy('score')
-			->all();
+			->orderBy('score');
+
+		if ($settings->offset > 0) {
+			$entries = $entries->offset($settings->offset);
+		}
+		if ($settings->limit > 0) {
+			$entries = $entries->limit($settings->limit);
+		}
 		$results = [];
-		foreach ($entries as $entry) {
+		foreach ($entries->all() as $entry) {
 			//dump($entry->title);
 			$result = new ExpandedSearchModel();
 			$result->entry = $entry;
