@@ -136,10 +136,10 @@ class ExpandedSearchService extends Component
 			// if the hit is after the middle, we need to shorten the text on both sides
 			$strpos = stripos($content, $term);
 			if ($strpos > $midway) {
-				$content = '...' . substr($content, $strpos - $midway);
+				$content = '...' . mb_substr($content, $strpos - $midway);
 			}
 			if (strlen($content) > $length) {
-				$content = substr($content, 0, $length) . '...';
+				$content = mb_substr($content, 0, $length) . '...';
 			}
 		}
 		return preg_replace($pattern, '<b>${1}</b>', $content);
