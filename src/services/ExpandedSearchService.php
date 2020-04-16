@@ -103,7 +103,7 @@ class ExpandedSearchService extends Component
 	* @param array $entries
 	* @param string $term
 	* @param object $settings
-	* @return array the ExpandedSerachModel object
+	* @return array the ExpandedSearchModel object
 	*/
 	public function expandSearchResults($entry, $term, $length = 300)
 	{
