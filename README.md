@@ -13,29 +13,27 @@ This plugin requires Craft CMS 3.0.0-beta.23 or later.
 
 To install the plugin, follow these instructions.
 
-1. Open your terminal and go to your Craft project:
+1.  Open your terminal and go to your Craft project:
 
         cd /path/to/project
 
-2. Then tell Composer to load the plugin:
+2.  Then tell Composer to load the plugin:
 
         composer require mustasj/expanded-search
 
-3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Expanded Search.
-
+3.  In the Control Panel, go to Settings → Plugins and click the “Install” button for Expanded Search.
 
 ## Using Expanded Search
 
 The first parameter is the search term. Which will be salted automatically: `*{term}*`
 The second is settings.
 
-| Setting | Type | Default |
-| ------ | ------ | ------ |
-| length | int | 300 |
-| Github | array | null (all sections) |
+| Setting | Type  | Default             |
+| ------- | ----- | ------------------- |
+| length  | int   | 300                 |
+| Github  | array | null (all sections) |
 
 In your search results template
-
 
 ```
 {% set expandedResults = craft.expandedSearch.search(query) %}
@@ -49,10 +47,26 @@ In your search results template
 {% endfor %}
 ```
 
+## Expanded Search from Element API
+
+To use the plugin from ElementAPI. Do a normal search and then for each result, you can fetch the `ExpandedSearchModel` from the service
+
+```
+'transformer' => function(Entry $entry) {
+    $searchResults = ExpandedSearch::$plugin->expandedSearchService->expandSearchResults($entry, $query, $length);
+    return [
+        'id' => $entry->title,
+        'title' => $entry->title,
+        'matchedValue' => $searchResult->matchedValue,
+        'matchedField' => $searchResult->matchedField
+    ];
+},
+```
+
 ## Expanded Search Roadmap
 
 Some things to do, and ideas for potential features:
 
-- [x] ~~Release it~~
-- [ ] Add handling for more fields
-- [ ] Add proper pagination within the plugin
+-   [x] ~~Release it~~
+-   [ ] Add handling for more fields
+-   [ ] Add proper pagination within the plugin
