@@ -28,10 +28,14 @@ To install the plugin, follow these instructions.
 The first parameter is the search term. Which will be salted automatically: `*{term}*`
 The second is settings.
 
-| Setting | Type  | Default             |
-| ------- | ----- | ------------------- |
-| length  | int   | 300                 |
-| Github  | array | null (all sections) |
+| Setting  | Type  | Purpose                                   | Default             |
+| -------- | ----- | ----------------------------------------- | ------------------- |
+| length   | int   | Cuts off the search value at given length | 300                 |
+| section  | array | section names to search in                | null (all sections) |
+| limit    | int   | how many results to return (pagination)   | 0 (all)             |
+| offset   | int   | how many results to skip (pagination)     | 0                   |
+| subLeft  | bool  | to use fuzzy search left                  | true                |
+| subRight | bool  | to use fuzzy search right                 | true                |
 
 In your search results template
 
@@ -68,5 +72,5 @@ To use the plugin from ElementAPI. Do a normal search and then for each result, 
 Some things to do, and ideas for potential features:
 
 -   [x] ~~Release it~~
+-   [x] ~~Add proper pagination within the plugin~~
 -   [ ] Add handling for more fields
--   [ ] Add proper pagination within the plugin
