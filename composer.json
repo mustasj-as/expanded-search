@@ -1,43 +1,43 @@
 {
-  "name": "mustasj/expanded-search",
-  "description": "An expansion of Crafts search",
-  "type": "craft-plugin",
-  "version": "1.2.1",
-  "keywords": [
-    "craft",
-    "cms",
-    "craftcms",
-    "craft-plugin",
-    "expanded search"
-  ],
-  "support": {
-    "docs": "https://github.com/mustasj/expanded-search/blob/master/README.md",
-    "issues": "https://github.com/mustasj/expanded-search/issues"
-  },
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Mustasj",
-      "homepage": "https://mustasj.no"
-    }
-  ],
-  "require": {
-    "craftcms/cms": "^3.1.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "mustasj\\expandedsearch\\": "src/"
-    }
-  },
-  "extra": {
-    "name": "Expanded Search",
-    "handle": "expanded-search",
-    "hasCpSettings": false,
-    "hasCpSection": false,
-    "changelogUrl": "https://raw.githubusercontent.com/mustasj/expanded-search/master/CHANGELOG.md",
-    "components": {
-      "expandedSearchService": "mustasj\\expandedsearch\\services\\ExpandedSearchService"
-    },
-    "class": "mustasj\\expandedsearch\\ExpandedSearch"
-  }
+	"name": "mustasj/expanded-search",
+	"description": "An expansion of Crafts search",
+	"type": "craft-plugin",
+	"version": "1.3.0",
+	"keywords": [
+		"craft",
+		"cms",
+		"craftcms",
+		"craft-plugin",
+		"expanded search"
+	],
+	"support": {
+		"docs": "https://github.com/mustasj/expanded-search/blob/master/README.md",
+		"issues": "https://github.com/mustasj/expanded-search/issues"
+	},
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Mustasj",
+			"homepage": "https://mustasj.no"
+		}
+	],
+	"require": {
+		"craftcms/cms": "^3.1.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"mustasj\\expandedsearch\\": "src/"
+		}
+	},
+	"extra": {
+		"name": "Expanded Search",
+		"handle": "expanded-search",
+		"hasCpSettings": false,
+		"hasCpSection": false,
+		"changelogUrl": "https://raw.githubusercontent.com/mustasj/expanded-search/master/CHANGELOG.md",
+		"components": {
+			"expandedSearchService": "mustasj\\expandedsearch\\services\\ExpandedSearchService"
+		},
+		"class": "mustasj\\expandedsearch\\ExpandedSearch"
+	}
 }
