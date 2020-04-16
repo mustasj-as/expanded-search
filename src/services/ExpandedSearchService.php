@@ -63,6 +63,7 @@ class ExpandedSearchService extends Component
 	{
 		$default = [
 			'sections' => null,
+			'sectionId' => null,
 			'length' => 300,
 			'limit' => 0,
 			'offset' => 0,
@@ -82,6 +83,7 @@ class ExpandedSearchService extends Component
 		$entries = Entry::find()
 			->search('*' . $query . '*')
 			->section($settings->sections)
+			->sectionId($settings->sectionId)
 			->orderBy('score');
 
 		if ($settings->offset > 0) {
