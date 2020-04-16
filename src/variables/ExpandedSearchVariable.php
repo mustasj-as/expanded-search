@@ -47,13 +47,6 @@ class ExpandedSearchVariable
      */
     public function search($term, $settings = [])
     {
-		$default = [
-			'sections' => null,
-			'length' => 300,
-			'limit' => 0,
-			'offset' => 0
-		];
-
-        return ExpandedSearch::$plugin->expandedSearchService->search($term, (object)array_merge($default, $settings));
+        return ExpandedSearch::$plugin->expandedSearchService->search($term, $settings);
     }
 }

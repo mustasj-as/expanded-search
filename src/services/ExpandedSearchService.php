@@ -61,8 +61,26 @@ class ExpandedSearchService extends Component
 	*/
 	public function search($term, $settings)
 	{
+		$default = [
+			'sections' => null,
+			'length' => 300,
+			'limit' => 0,
+			'offset' => 0,
+			'subLeft' => true,
+			'subRight' => true
+		];
+		$settings = (object)array_merge($default, $settings);
+		
+		$query = $term;
+		if ($settings->subLeft) {
+			$query = '*' . $query;
+		}
+		if ($settings->subRight) {
+			$query = $query . '*';
+		}
+		
 		$entries = Entry::find()
-			->search('*' . $term . '*')
+			->search('*' . $query . '*')
 			->section($settings->sections)
 			->orderBy('score');
 
