@@ -92,13 +92,26 @@ class ExpandedSearchService extends Component
 		}
 		$results = [];
 		foreach ($entries->all() as $entry) {
-			//dump($entry->title);
-			$result = new ExpandedSearchModel();
-			$result->entry = $entry;
-			list ($result->matchedField, $result->matchedValue, $result->relatedValues) = $this->findMatchesInFieldSet($entry, $term, $settings->length);
-			$results[] = $result;
+			$results[] = $this->expandSearchResults($entry, $term, $settings->length);
 		}
 		return $results;
+	}
+
+	/**
+	* Sets up a array of ExpandedSearchModels with highlights
+	*
+	* @param array $entries
+	* @param string $term
+	* @param object $settings
+	* @return array the ExpandedSerachModel object
+	*/
+	public function expandSearchResults($entry, $term, $length = 300)
+	{
+		//dump($entry->title);
+		$result = new ExpandedSearchModel();
+		$result->entry = $entry;
+		list ($result->matchedField, $result->matchedValue, $result->relatedValues) = $this->findMatchesInFieldSet($entry, $term, $length);
+		return $result;
 	}
 
 	/**
