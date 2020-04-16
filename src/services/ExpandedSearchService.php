@@ -61,9 +61,29 @@ class ExpandedSearchService extends Component
 	*/
 	public function search($term, $settings)
 	{
+		$default = [
+			'sections' => null,
+			'sectionId' => null,
+			'length' => 300,
+			'limit' => 0,
+			'offset' => 0,
+			'subLeft' => true,
+			'subRight' => true
+		];
+		$settings = (object)array_merge($default, $settings);
+		
+		$query = $term;
+		if ($settings->subLeft) {
+			$query = '*' . $query;
+		}
+		if ($settings->subRight) {
+			$query = $query . '*';
+		}
+		
 		$entries = Entry::find()
-			->search('*' . $term . '*')
+			->search('*' . $query . '*')
 			->section($settings->sections)
+			->sectionId($settings->sectionId)
 			->orderBy('score');
 
 		if ($settings->offset > 0) {
@@ -74,13 +94,26 @@ class ExpandedSearchService extends Component
 		}
 		$results = [];
 		foreach ($entries->all() as $entry) {
-			//dump($entry->title);
-			$result = new ExpandedSearchModel();
-			$result->entry = $entry;
-			list ($result->matchedField, $result->matchedValue, $result->relatedValues) = $this->findMatchesInFieldSet($entry, $term, $settings->length);
-			$results[] = $result;
+			$results[] = $this->expandSearchResults($entry, $term, $settings->length);
 		}
 		return $results;
+	}
+
+	/**
+	* Sets up a array of ExpandedSearchModels with highlights
+	*
+	* @param array $entries
+	* @param string $term
+	* @param object $settings
+	* @return array the ExpandedSearchModel object
+	*/
+	public function expandSearchResults($entry, $term, $length = 300)
+	{
+		//dump($entry->title);
+		$result = new ExpandedSearchModel();
+		$result->entry = $entry;
+		list ($result->matchedField, $result->matchedValue, $result->relatedValues) = $this->findMatchesInFieldSet($entry, $term, $length);
+		return $result;
 	}
 
 	/**
