@@ -82,9 +82,14 @@ class ExpandedSearchService extends Component
 		
 		$entries = Entry::find()
 			->search($query)
-			->section($settings->sections)
-			->sectionId($settings->sectionId)
 			->orderBy('score');
+
+		if ($settings->sections) {
+            $entries->section($settings->sections);
+        }
+		if ($settings->sectionId) {
+            $entries->sectionId($settings->sectionId);
+        }
 
 		if ($settings->offset > 0) {
 			$entries = $entries->offset($settings->offset);
