@@ -81,10 +81,15 @@ class ExpandedSearchService extends Component
 		}
 		
 		$entries = Entry::find()
-			->search('*' . $query . '*')
-			->section($settings->sections)
-			->sectionId($settings->sectionId)
+			->search($query)
 			->orderBy('score');
+
+		if ($settings->sections) {
+            $entries->section($settings->sections);
+        }
+		if ($settings->sectionId) {
+            $entries->sectionId($settings->sectionId);
+        }
 
 		if ($settings->offset > 0) {
 			$entries = $entries->offset($settings->offset);
@@ -194,7 +199,7 @@ class ExpandedSearchService extends Component
 			//dump($fieldContents);
 			if (is_scalar($fieldContents))
 			{
-				if (stripos($fieldContents, $term) !== false) {
+				if (stripos($fieldContents, (string)$term) !== false) {
 					return [$fieldHandle, $this->contextualizeHit($fieldContents, $term, $length), []];
 				}
 			}
@@ -220,8 +225,7 @@ class ExpandedSearchService extends Component
 			}
 			elseif (is_object($fieldContents) && $fieldContents instanceof \craft\redactor\FieldData)
 			{
-				//dump(stripos($fieldContents->getParsedContent(), $term));
-				if (stripos($fieldContents->getParsedContent(), $term)) {
+				if (stripos($fieldContents->getParsedContent(), (string)$term)) {
 					return [$fieldHandle, $this->contextualizeHit($fieldContents->getParsedContent(), $term, $length), []];
 				}
 			}
