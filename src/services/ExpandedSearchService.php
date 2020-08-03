@@ -81,7 +81,7 @@ class ExpandedSearchService extends Component
 		}
 		
 		$entries = Entry::find()
-			->search('*' . $query . '*')
+			->search($query)
 			->section($settings->sections)
 			->sectionId($settings->sectionId)
 			->orderBy('score');
