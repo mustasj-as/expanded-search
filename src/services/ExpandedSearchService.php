@@ -62,6 +62,7 @@ class ExpandedSearchService extends Component
 	public function search($term, $settings)
 	{
 		$default = [
+			'type' => 'entry',
 			'sections' => null,
 			'sectionId' => null,
 			'length' => 300,
@@ -79,28 +80,40 @@ class ExpandedSearchService extends Component
 		if ($settings->subRight) {
 			$query = $query . '*';
 		}
-		
-		$entries = Entry::find()
-			->search($query)
-			->orderBy('score');
 
-		if ($settings->sections) {
-            $entries->section($settings->sections);
-        }
-		if ($settings->sectionId) {
-            $entries->sectionId($settings->sectionId);
-        }
+		switch ($settings->type) {
+			case 'entry':
+				$elementType = Entry::class;
+				break;
+			case 'asset':
+				$elementType = Asset::class;
+				break;
+			default:
+				throw new \InvalidArgumentException('Invalid type "' . $settings->type . '". Must be one of: entry, asset');
+		}
+
+		$elementQuery = $elementType::find()
+			->search('*' . $query . '*');
+
+		if ($elementType === Entry::class) {
+			$elementQuery
+				->section($settings->sections)
+				->sectionId($settings->sectionId);
+		}
+
+		$elementQuery->orderBy('score');
 
 		if ($settings->offset > 0) {
-			$entries = $entries->offset($settings->offset);
+			$elementQuery = $elementQuery->offset($settings->offset);
 		}
 		if ($settings->limit > 0) {
-			$entries = $entries->limit($settings->limit);
+			$elementQuery = $elementQuery->limit($settings->limit);
 		}
 		$results = [];
-		foreach ($entries->all() as $entry) {
-			$results[] = $this->expandSearchResults($entry, $term, $settings->length);
+		foreach ($elementQuery->all() as $element) {
+			$results[] = $this->expandSearchResults($element, $term, $settings->length);
 		}
+
 		return $results;
 	}
 
