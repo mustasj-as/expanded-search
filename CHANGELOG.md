@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.3.8 - 2021-07-13
+### Fixed
+- Fixed `matchedValue` not returning when working with SuperTable field
+
 ## 1.2.1 - 2019-04-01
 ### Fixed
 - Fixed error when truncating on foreign characters
