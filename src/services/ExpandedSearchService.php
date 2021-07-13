@@ -205,7 +205,16 @@ class ExpandedSearchService extends Component
 			}
 			elseif (is_object($fieldContents) && $fieldContents instanceof \verbb\supertable\elements\db\SuperTableBlockQuery)
 			{
-				//TODO: fix this somehow
+				$relatedValues = [];
+				$matchedValue = '';
+				foreach ($fieldContents->all() as $stBlock) {
+					$stMatches = $this->findMatchesInFieldSet($stBlock, $term, $length);
+					if (!is_null($stMatches)) {
+						$matchedValue = $stMatches[1];
+					}
+				}
+				// TODO: Should we append the matched sub-field handle to the higher-level handle?
+				return [$fieldHandle, $matchedValue, $relatedValues];
 			}
 			elseif (is_object($fieldContents) && $fieldContents instanceof \craft\elements\db\MatrixBlockQuery)
 			{
